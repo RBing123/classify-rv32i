@@ -62,6 +62,14 @@ write_matrix:
     bne a0, t0, fwrite_error
 
     # mul s4, s2, s3   # s4 = total elements
+    mv s4, x0        # Initialize result to 0
+    mv t0, s2        # Copy number of rows to t0
+multiply_loop:
+    beq t0, x0, multiply_done
+    add s4, s4, s3   # Add number of columns
+    addi t0, t0, -1  # Decrement counter
+    j multiply_loop
+multiply_done:
     # FIXME: Replace 'mul' with your own implementation
 
     # write matrix data to file
