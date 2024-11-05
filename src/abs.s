@@ -22,7 +22,10 @@ abs:
     bge t0, zero, done
 
     # TODO: Add your own implementation
-
+    srai t1, t0, 31    # Arithmetic right shift by 31 to get all 1s if negative, all 0s if positive
+    xor t0, t0, t1     # XOR with the mask
+    sub t0, t0, t1     # Subtract the mask
+    sw t0, 0(a0)       # Store back to memory
 done:
     # Epilogue
     jr ra
