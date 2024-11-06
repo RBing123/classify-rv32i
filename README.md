@@ -7,7 +7,7 @@ TODO: Add your own descriptions here.
 ### ArgMax
 ### Dot product
 ### Matrix Multiplication
-## Part B
+## Part B: File Operations and Main
 ### Read Matrix
 ### Write Matrix
 ### Classification
