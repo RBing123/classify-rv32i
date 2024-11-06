@@ -3,6 +3,17 @@
 TODO: Add your own descriptions here.
 ## Part A: Mathematical function
 ### ABS
+We can obtain the absolute value by using bitwise operation.
+1. Arithmetic Shift Right(`srai t1, t0, 31`)
+* The purpose here is to create a mask in `t1` that depends on the sign of `t0`.
+* In RISC-V, an arithmetic shift right replicates the sign bit, so if `t0` is positive (sign bit = 0), t1 will be 0. If `t0` is negative (sign bit = 1), `t1` will be filled with all 1s 
+2. XOR with the Mask(`xor t0, t0, t1`)
+* If `t0` was positive (`t1` = 0), XORing with 0 has no effect, so t0 remains unchanged.
+* If `t0` was negative (`t1` = `0xFFFFFFFF`), XORing flips all bits of `t0`, effectively computing the bitwise complement of `t0`
+* After this operation, `t0` is either the original positive value or the bitwise negation of the original negative value.
+3. Subtract the Mask (`sub t0, t0, t1`)
+* After XORing, if `t0` was negative, it’s now in the form of a bitwise complement. Subtracting `t1` (which is `0xFFFFFFFF`) effectively adds 1, converting `t0` to its positive (absolute) value.
+* If `t0` was positive, this operation does nothing since `t1` is 0.
 ### ReLU
 ### ArgMax
 ### Dot product
