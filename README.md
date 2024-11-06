@@ -1,7 +1,16 @@
 # Assignment 2: Classify
 
 TODO: Add your own descriptions here.
-
+## Part A: Mathematical function
+### ABS
+### ReLU
+### ArgMax
+### Dot product
+### Matrix Multiplication
+## Part B
+### Read Matrix
+### Write Matrix
+### Classification
 ## Result
 ```bash
 test_abs_minus_one (__main__.TestAbs) ... ok
