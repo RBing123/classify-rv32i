@@ -1,6 +1,4 @@
 # Assignment 2: Classify
-
-TODO: Add your own descriptions here.
 ## Part A: Mathematical function
 ### ABS
 We can obtain the absolute value by using bitwise operation.
@@ -15,6 +13,13 @@ We can obtain the absolute value by using bitwise operation.
 * After XORing, if `t0` was negative, it’s now in the form of a bitwise complement. Subtracting `t1` (which is `0xFFFFFFFF`) effectively adds 1, converting `t0` to its positive (absolute) value.
 * If `t0` was positive, this operation does nothing since `t1` is 0.
 ### ReLU
+1. `loop_start`
+The instruction `beq t1, a1, loop_end` checks that whether `t1` reaches `a1`(the length of vector). `t1` is an index tracking the current element of the vector.
+2. load word and calculate
+The starting address of the array is `a0`, and we want to access the position of the i-th element. `t1` holds the i-th index so we need to multiple 4 to get the element because of the integer is 4 byte.
+Then we need to add the starting address which is `a0` and the corresponding instruction is `add t3, a0, t2`. However, we can load the element by the address with `lw t4, 0(t3)`.
+3. Check ReLU value and renew the value
+ReLU operation is make the negative input value to be positive. Otherwise, we can skip manipulating it. The corresponding instruction is `bge t4, zero, skip`. Then we write back the negative input value to original address with `zero` value.
 ### ArgMax
 ### Dot product
 ### Matrix Multiplication
