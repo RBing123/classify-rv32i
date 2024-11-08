@@ -93,6 +93,52 @@ In `write_matrix`, this function will calculate the total number of matrix eleme
    * The loop exits once `t0` becomes`0`, at which point `s4` holds the value of `s2 * s3`, representing the total number of elements in the matrix.
 This approach replicates mjultiplication by summing `s3` for eacch row, ensuring the final result in `s4` equals `s2 * s3` without using the `mul` instruction.
 ### Classification
+In the `classify.s`, I need to avoid using `mul` instruction, hence, I implemented multiplication through binary operations using only RV32I base integer instructions. The algorithm breaks down multiplication into a series of shifts and additions, where one number is treated as a binary multiplier and the other as a multiplicand. For each set bit (1) in the binary representation, the shifted value of the multiplicand is added to the result, effectively performing multiplication using only basic arithmetic and bit manipulation operations. The corresponding code is shown below.
+```c
+# t0 and t1 are the numbers to be multiplied
+li a0, 0          # Initialize result to 0
+beqz t0, mul1_done # If either number is 0, end
+beqz t1, mul1_done
+
+mul1_loop:
+    andi t2, t1, 1    # Get least significant bit of t1
+    beqz t2, mul1_skip # If LSB is 0, skip addition
+    add a0, a0, t0    # If LSB is 1, add t0 to result
+mul1_skip:
+    slli t0, t0, 1    # Left shift t0 (multiply by 2)
+    srli t1, t1, 1    # Right shift t1 (check next bit)
+    bnez t1, mul1_loop # If t1 is not zero, continue loop
+mul1_done:
+```
+First of all, I will introduce the [Russian Peasant Algorithm](https://www.wikihow.com/Multiply-Using-the-Russian-Peasant-Method), as this method allows me to avoid using the `mul` instruction.
+The algorithm follows these rules:
+1. Write down the two numbers to be multiplied
+2. Repeatedly halve the first number (discarding remainders)
+3. Repeatedly double the second number
+4. Cross out each row where the first number is even
+5. Sum the remaining numbers in the second column
+
+Based on these rules, I implemented the algorithm in RV32I assembly with the following structure:
+1. Initialize the result register for sum
+```c
+li a0, 0          # Initialize result to 0
+```
+2. check if the first number is odd
+```c
+andi t2, t1, 1    # Check if first number is odd
+beqz t2, mul1_skip # Skip if even
+add a0, a0, t0    # Add to sum if odd
+```
+3. Double and halve numbers
+```c
+mul1_skip:
+    slli t0, t0, 1    # Double second number
+    srli t1, t1, 1    # Halve first number
+```
+4. Continue until first number becomes zero
+```c
+bnez t1, mul1_loop   # Continue if first number isn't zero
+```
 ## Result
 ```bash
 test_abs_minus_one (__main__.TestAbs) ... ok
