@@ -1,6 +1,6 @@
 # Assignment 2: Classify
 ## Part A: Mathematical function
-### ABS
+### abs
 We can obtain the absolute value by using bitwise operation.
 1. Arithmetic Shift Right(`srai t1, t0, 31`)
 * The purpose here is to create a mask in `t1` that depends on the sign of `t0`.
@@ -82,6 +82,16 @@ In `read_matrix.s`, I replace `mul` instruction with my own implementation. And 
 
 By the end of `multiply_loop`, `s1` holds the total number of elements in the matrix (`t1 * t2`). This result is then shifted by 2 bits (slli t3, s1, 2) to convert the count into bytes (since each maatrix element is 4 bytes).
 ### Write Matrix
+In `write_matrix`, this function will calculate the total number of matrix elements (`s4 = s2 * s3`) without using the `mul` instruction, by implementing multiplication as repeated addition.
+1. Initialization
+   * `s4` is initialized to `0` and will store the result of `s2 * s3` (total elements).
+   * `t0` is set to `s2` (number of rows) and is used as a loop counter.
+2. Loop: Repeated Addition
+   * Each loop iteration adds `s3` (the number of columns) to `s4`, simulating multiplication. This means `s3` is added `s2` times.
+   * `t0` is decremented after each addition to track the number of repetitions (equivalent to the row count).
+3. Loop Termination
+   * The loop exits once `t0` becomes`0`, at which point `s4` holds the value of `s2 * s3`, representing the total number of elements in the matrix.
+This approach replicates mjultiplication by summing `s3` for eacch row, ensuring the final result in `s4` equals `s2 * s3` without using the `mul` instruction.
 ### Classification
 ## Result
 ```bash
