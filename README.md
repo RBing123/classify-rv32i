@@ -70,6 +70,17 @@ After the dot product calculation, the result (stored in `t0`) is written to the
 After completing each column iteration for a row in `M0`, the pointer `s3` is advanced to the next row, and `s4` is reset to the beginning of `M1` for the next dot product calculation in the following row.
 ## Part B: File Operations and Main
 ### Read Matrix
+In `read_matrix.s`, I replace `mul` instruction with my own implementation. And the purpose of `multiply_loop` in this file is to calculate the product of the row and column counts (`t1` and `t2`) without using the `mul` instruction, which may be restricted or unavailable in this environment. Instead, this loop simulates multiplication by using repeated addition.
+1. Initialize the Result and Counter
+   * `s1` is initialized to `0` to store the final result.
+   * `t3` is set to `t1`, the row count, and serves as a counter to ccontrol the loop.
+2. Loop: Repeated Addition
+   * In each iteration, `t2`(the number of columns) is added to `s1`. This effectively adds `t2`a total of `t1` times, achieving the equivalent of `t1 * t2`.
+   * `t3` is then decremented by 1 to move closer to the end of the loop.
+3. Loop Termination
+   * The loop continues until `t3`(initially set to `t1`) becomes zero, signaling that `t2` has been added `t1` times.
+
+By the end of `multiply_loop`, `s1` holds the total number of elements in the matrix (`t1 * t2`). This result is then shifted by 2 bits (slli t3, s1, 2) to convert the count into bytes (since each maatrix element is 4 bytes).
 ### Write Matrix
 ### Classification
 ## Result
