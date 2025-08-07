@@ -1,4 +1,4 @@
-# Assignment 2: Classify
+# Classify
 ## Part A: Mathematical function
 ### abs
 We can obtain the absolute value by using bitwise operation.
